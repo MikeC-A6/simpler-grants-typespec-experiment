@@ -1,0 +1,277 @@
+openapi: 3.0.0
+info:
+  title: Common Grants Protocol API
+  description: Common Grants Protocol API
+  version: 0.0.0
+tags:
+  - name: Opportunities
+paths:
+  /api/opportunities:
+    get:
+      operationId: Operations_listOpportunities
+      summary: List all opportunities
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommonGrants.Models.Opportunity'
+      tags:
+        - Opportunities
+    post:
+      operationId: Operations_createOpportunity
+      summary: Create a new opportunity
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonGrants.Models.Opportunity'
+      tags:
+        - Opportunities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommonGrants.Models.Opportunity'
+  /api/opportunities/{id}:
+    get:
+      operationId: Operations_getOpportunity
+      summary: Get a specific opportunity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonGrants.Models.Opportunity'
+      tags:
+        - Opportunities
+    put:
+      operationId: Operations_updateOpportunity
+      summary: Update an existing opportunity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonGrants.Models.Opportunity'
+      tags:
+        - Opportunities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommonGrants.Models.Opportunity'
+    delete:
+      operationId: Operations_deleteOpportunity
+      summary: Delete an opportunity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+      tags:
+        - Opportunities
+components:
+  schemas:
+    CommonGrants.Models.Currency:
+      type: object
+      required:
+        - amount
+        - display
+        - currencyCode
+      properties:
+        amount:
+          type: number
+          description: The amount of currency
+        display:
+          type: string
+          description: How the currency amount should be displayed
+        currencyCode:
+          type: string
+          description: The ISO 4217 currency code in which the amount is denominated
+      example:
+        amount: -50.5
+        display: ($50.50)
+        currencyCode: USD
+    CommonGrants.Models.CustomField:
+      type: object
+      required:
+        - name
+        - type
+        - value
+      properties:
+        name:
+          type: string
+          description: Name of the custom field
+        type:
+          allOf:
+            - $ref: '#/components/schemas/CommonGrants.Models.CustomFieldType'
+          description: The JSON schema type to use when de-serializing the `value` field
+        schema:
+          type: string
+          format: uri
+          description: Link to the full JSON schema for this custom field
+        value:
+          description: Value of the custom field
+        description:
+          type: string
+          description: Description of the custom field's purpose
+        context:
+          type: string
+          format: uri
+          description: Optional URL with additional information
+      example:
+        name: eligibilityType
+        type: array
+        value:
+          - nonprofit
+          - academic
+        description: Types of eligible organizations
+    CommonGrants.Models.CustomFieldType:
+      type: string
+      enum:
+        - string
+        - number
+        - boolean
+        - object
+        - array
+      description: The set of JSON schema types supported by a custom field
+    CommonGrants.Models.Event:
+      type: object
+      required:
+        - name
+        - date
+      properties:
+        name:
+          type: string
+          description: Name of the timeline event (e.g., 'Open Date', 'Deadline')
+        date:
+          allOf:
+            - $ref: '#/components/schemas/CommonGrants.Models.isoDate'
+          description: 'Date of the event in in ISO 8601 format: YYYY-MM-DD'
+        time:
+          allOf:
+            - $ref: '#/components/schemas/CommonGrants.Models.isoTime'
+          description: 'Time of the event in ISO 8601 format: HH:MM:SS'
+        description:
+          type: string
+          description: Detailed description of the timeline event
+      example:
+        name: Open Date
+        date: '2024-01-15'
+        description: Applications begin being accepted
+    CommonGrants.Models.FundingDetails:
+      type: object
+      properties:
+        totalAmountAvailable:
+          $ref: '#/components/schemas/CommonGrants.Models.Currency'
+        minAwardAmount:
+          $ref: '#/components/schemas/CommonGrants.Models.Currency'
+        maxAwardAmount:
+          $ref: '#/components/schemas/CommonGrants.Models.Currency'
+        minAwardCount:
+          type: integer
+        maxAwardCount:
+          type: integer
+        estimatedAwardCount:
+          type: integer
+      example:
+        totalAmountAvailable:
+          amount: 1000000
+          display: $1,000,000
+          currencyCode: USD
+        estimatedAwardCount: 10
+    CommonGrants.Models.Opportunity:
+      type: object
+      required:
+        - id
+        - source
+        - title
+        - description
+        - fundingDetails
+      properties:
+        id:
+          allOf:
+            - $ref: '#/components/schemas/CommonGrants.Models.uuid'
+          description: Globally unique id for the opportunity
+        source:
+          type: string
+          format: uri
+          description: URL for the original source of the opportunity
+        title:
+          type: string
+          description: Title or name of the funding opportunity
+        description:
+          type: string
+          description: Description of the opportunity's purpose and scope
+        fundingDetails:
+          allOf:
+            - $ref: '#/components/schemas/CommonGrants.Models.FundingDetails'
+          description: Details about the funding available
+        applicationTimeline:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonGrants.Models.Event'
+          description: Key dates and milestones in the application process
+        customFields:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonGrants.Models.CustomField'
+          description: Additional custom fields specific to this opportunity
+      example:
+        id: 550e8400-e29b-41d4-a716-446655440001
+        source: https://grants.gov/opportunity/456
+        title: Small Business Innovation Grant
+        description: Supporting small business innovation projects
+        fundingDetails:
+          totalAmountAvailable:
+            amount: 1000000
+            display: $1,000,000
+            currencyCode: USD
+          estimatedAwardCount: 10
+    CommonGrants.Models.isoDate:
+      type: string
+      format: time
+      description: A date on a calendar in ISO 8601 format YYYY-MM-DD
+      example: '2025-01-01'
+    CommonGrants.Models.isoTime:
+      type: string
+      format: time
+      description: A time on a clock, without a timezone, in ISO 8601 format HH:mm:ss
+      example: '17:00:00'
+    CommonGrants.Models.uuid:
+      type: string
+      format: uuid
+      description: A universally unique identifier
+      example: 30a12e5e-5940-4c08-921c-17a8960fcf4b
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+    variables: {}

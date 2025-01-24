@@ -1,8 +1,11 @@
 import "@typespec/http";
 import "@typespec/rest";
-
-// Import individual route files to provide a consistent interface
+import "@typespec/openapi3";
 import "./opportunities.tsp";
 
-// Define the
+using TypeSpec.Http;
+using TypeSpec.Rest;
+using TypeSpec.OpenAPI3;
+
+// Define the namespace
 namespace CommonGrants.Routes;

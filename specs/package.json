@@ -38,11 +38,12 @@
   "author": "HHS",
   "license": "CC0-1.0",
   "peerDependencies": {
-    "@typespec/compiler": "^0.63.0",
-    "@typespec/http": "^0.63.0",
-    "@typespec/json-schema": "^0.63.0",
-    "@typespec/openapi3": "^0.63.0",
-    "@typespec/rest": "^0.63.0"
+    "@typespec/compiler": "^0.64.0",
+    "@typespec/http": "^0.64.0",
+    "@typespec/json-schema": "^0.64.0",
+    "@typespec/openapi3": "^0.64.0",
+    "@typespec/rest": "^0.64.0",
+    "@typespec/openapi": "^0.64.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.6",
@@ -51,6 +52,12 @@
     "rimraf": "^5.0.5",
     "source-map-support": "^0.5.21",
     "typescript": "^5.3.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.20.0",
+    "@typespec/compiler": "^0.64.0",
+    "@typespec/http": "^0.64.0",
+    "@typespec/json-schema": "^0.64.0",
+    "@typespec/openapi3": "^0.64.0",
+    "@typespec/rest": "^0.64.0",
+    "@typespec/openapi": "^0.64.0"
   }
 }

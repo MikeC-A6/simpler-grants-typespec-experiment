@@ -15,7 +15,7 @@ namespace CommonGrants.Models;
 )
 model Currency {
   /** The amount of currency */
-  amount: decimal;
+  amount: numeric;
 
   /** How the currency amount should be displayed */
   display: string;

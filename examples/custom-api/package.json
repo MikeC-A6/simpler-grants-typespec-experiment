@@ -15,7 +15,13 @@
   },
   "peerDependencies": {
     "@common-grants/core": "file:../../specs/common-grants-core-0.1.0-alpha.3.tgz",
-    "@typespec/compiler": "^0.63.0"
+    "@typespec/compiler": "^0.64.0"
+  },
+  "dependencies": {
+    "@typespec/http": "^0.64.0",
+    "@typespec/json-schema": "^0.64.0",
+    "@typespec/openapi3": "^0.64.0",
+    "@typespec/rest": "^0.64.0"
   },
   "private": true,
   "devDependencies": {
